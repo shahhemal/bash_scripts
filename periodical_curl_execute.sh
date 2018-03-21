@@ -41,7 +41,7 @@ echo MAX_INTERVAL = $MAX_INTERVAL
 
 CNT=0
 
-while [ $CNT -lt $MAX_REQ ]; do
+while [ $CNT -lt $MAX_REQUEST ]; do
     curl -u elastic:changeme -o /dev/null -s -w "Time: $(date)  Total time: %{time_total}\n" -XPOST http://10.34.193.70:9200/il-search-ilp/_search -d @workspaceMetadataQuery_New.json >> $LOG_FILE
 
     CNT=$[$CNT+1]
