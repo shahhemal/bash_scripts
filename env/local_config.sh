@@ -8,8 +8,8 @@ MAX_REQUEST=2
 # Max interval between 2 consecutive request eg: 2s (2 secs) or 5m (5 mins)
 MAX_INTERVAL=5s
 
-# Request json file path
-REQUEST_JSON="commons/workspaceMetadataQuery.json"
+# Search url
+SEARCH_URL=http://10.34.193.70:9200/il-search-ilp/_search
 
-# Test name to get printed in logs to differentiate different execution
-TEST_NAME=""
+# Log file location
+LOG_FILE="logs/response_time_monitoring_test.log"

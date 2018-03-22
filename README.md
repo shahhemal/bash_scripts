@@ -2,10 +2,26 @@
 
 sample execution commands
 
-./curl_main.sh -e local -w 4663215 -u 32864585 -t w4663215_u32864585_slow
+Local
+./curl_main.sh -e local -t ws_meta -u 1872591 -w 11205381
+./curl_main.sh -e local -t ws_content -u 1872591 -w 11205381
+./curl_main.sh -e local -t hub_meta -u 1872591
+./curl_main.sh -e local -t hub_content -u 1872591
 
-./curl_main.sh -e dev4 -w 4663215 -u 32864585 -t w4663215_u32864585_slow
+Dev4
+./curl_main.sh -e dev4 -t ws_meta -u 1872591 -w 11205381
+./curl_main.sh -e dev4 -t ws_content -u 1872591 -w 11205381
+./curl_main.sh -e dev4 -t hub_meta -u 1872591
+./curl_main.sh -e dev4 -t bub_content -u 1872591
 
-./curl_main.sh -e wdl -w 4663215 -u 32864585 -t w4663215_u32864585_slow
+Wdl
+./curl_main.sh -e wdl -t ws_meta -u 32864585 -w 4663215
+./curl_main.sh -e wdl -t ws_content -u 32864585 -w 4663215
+./curl_main.sh -e wdl -t hub_meta -u 32864585
+./curl_main.sh -e wdl -t hub_content -u 32864585
 
-./curl_main.sh -e crl -w 4663215 -u 32864585 -t w4663215_u32864585_slow
+CRL
+./curl_main.sh -e crl -t ws_meta -u 32864585 -w 4663215
+./curl_main.sh -e crl -t ws_content -u 32864585 -w 4663215
+./curl_main.sh -e crl -t hub_meta -u 32864585
+./curl_main.sh -e crl -t hub_content -u 32864585

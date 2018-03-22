@@ -1,4 +1,5 @@
 #!/bin/bash
+#set -x
 
 # Periodically executes curl command and captures response time in a log file
 
@@ -6,8 +7,8 @@ while [[ $# -gt 0 ]]
 do
 key="$1"
 case $key in
-    -t|--test-folder)
-    TEST_FOLDER_ARG="$2"
+    -t|--test-type)
+    TEST_TYPE_ARG="$2"
     shift # past argument
     shift # past value
     ;;
@@ -26,11 +27,17 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    -m|--log-msg)
+    LOG_MSG="$2"
+    shift # past argument
+    shift # past value
+    ;;
 esac
 done
 
-if [[ -z $TEST_FOLDER_ARG ]]; then
-    echo "Missing TEST_FOLDER_ARG argument for eg: -t w1508272_u31291675_fast"
+if [[ -z $TEST_TYPE_ARG ]]; then
+    # options: ws_meta, ws_content, hub_meta, hub_content
+    echo "Missing TEST_TYPE_ARG argument for eg: -t ws_meta"
     exit 1
 fi
 
@@ -39,7 +46,10 @@ if [[ -z $USER_ID_ARG ]]; then
     exit 1
 fi
 
-if [[ $REQUEST_JSON = *"workspace"* && -n $WS_ID_ARG ]]; then
+# Request json file path
+REQUEST_JSON="commons/$TEST_TYPE_ARG.json"
+
+if [[ $REQUEST_JSON = *"ws"* && -z "$WS_ID_ARG" ]]; then
     echo "Missing WORKSPACE_ID argument for eg: -w 1508272"
     exit 1
 fi
@@ -53,16 +63,10 @@ echo ""
 echo "### Execution started ###"
 echo ""
 
-source commons/${ENV}_common_config.sh
-source $TEST_FOLDER_ARG/config.sh
-
-if [[ -z $TEST_NAME ]]; then
-    TEST_NAME=$TEST_FOLDER_ARG
-    echo "TEST_NAME is empty, setting default to:" $TEST_NAME
-fi
+source env/${ENV}_config.sh
 
 if [[ -z $MAX_REQUEST ]]; then
-    MAX_REQUEST=10
+    MAX_REQUEST=5
     echo "MAX_REQUEST is empty, setting default to:" $MAX_REQUEST
 fi
 
@@ -71,28 +75,30 @@ if [[ -z $MAX_INTERVAL ]]; then
     echo "MAX_INTERVAL is empty, setting default to:" $MAX_INTERVAL
 fi
 
+# Name of file which contains unique search terms for the test
+SEARCH_TERMS_FILE="env/${ENV}_search_terms.txt"
+
+echo TEST_TYPE = $TEST_TYPE_ARG
+echo MAX_REQUEST  = $MAX_REQUEST
+echo MAX_INTERVAL = $MAX_INTERVAL
+echo SEARCH_URL = $SEARCH_URL
+echo REQUEST_JSON = $REQUEST_JSON
+
+echo USER_ID = $USER_ID_ARG
+echo WORKSPACE_ID = $WS_ID_ARG
+echo SEARCH_TERMS_FILE = $SEARCH_TERMS_FILE
+
+
+FILE_CONTENT=$(cat $REQUEST_JSON | jq -c .)
+#echo "original file content: " $FILE_CONTENT
+
 # User id for whom search request is executed
 USER_ID="$USER_ID_ARG"
 
 # (OPTIONAL) Workspace id against which search request has to get executed
 WORKSPACE_ID="$WS_ID_ARG"
 
-# Name of file which contains unique search terms for the test
-SEARCH_TERMS_FILE="$TEST_FOLDER_ARG/search_terms.txt"
-
-echo TEST_NAME = $TEST_NAME
-echo MAX_REQUEST  = $MAX_REQUEST
-echo MAX_INTERVAL = $MAX_INTERVAL
-echo SEARCH_URL = $SEARCH_URL
-echo REQUEST_JSON = $REQUEST_JSON
-
-echo USER_ID = $USER_ID
-echo WORKSPACE_ID = $WORKSPACE_ID
-echo SEARCH_TERMS_FILE = $SEARCH_TERMS_FILE
-
-
-FILE_CONTENT=$(cat $REQUEST_JSON | jq -c .)
-#echo "original file content: " $FILE_CONTENT
+COMM_LOG_MSG="testType: $TEST_TYPE_ARG - userId: $USER_ID_ARG - wsId: $WS_ID_ARG"
 
 CNT=0
 
@@ -109,7 +115,7 @@ while [ $CNT -lt $MAX_REQUEST ]; do
 
     DATE=$(date +%d-%m-%Y" "%H:%M:%S);
 
-    curl -u elastic:changeme -o /dev/null -s -w "$TEST_NAME - $DATE - $RANDOM_WORD - %{time_total}\n" -XPOST $SEARCH_URL -d "$FILE_CONTENT" >> $LOG_FILE
+    curl -u elastic:changeme -o /dev/null -s -w "$DATE - $LOG_MSG - $COMM_LOG_MSG - respTime: %{time_total} - searchTerm: $RANDOM_WORD\n" -XPOST $SEARCH_URL -d "$FILE_CONTENT" >> $LOG_FILE
     #curl -u elastic:changeme -o "logs/output.txt" -XPOST $SEARCH_URL -d "$FILE_CONTENT"
 
     CNT=$[$CNT+1]
