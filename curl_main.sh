@@ -39,7 +39,9 @@ if [[ $REQUEST_JSON = *"workspace"* && -n $WS_ID_ARG ]]; then
     exit 1
 fi
 
-echo "Execution started"
+echo ""
+echo "### Execution started ###"
+echo ""
 
 source common_config.sh
 source $TEST_FOLDER_ARG/config.sh
@@ -107,4 +109,6 @@ while [ $CNT -lt $MAX_REQUEST ]; do
     fi
 done
 
-echo "Execution completed"
+echo ""
+echo "### Execution completed ###"
+echo ""
