@@ -53,7 +53,7 @@ echo ""
 echo "### Execution started ###"
 echo ""
 
-source ${ENV}_common_config.sh
+source commons/${ENV}_common_config.sh
 source $TEST_FOLDER_ARG/config.sh
 
 if [[ -z $TEST_NAME ]]; then

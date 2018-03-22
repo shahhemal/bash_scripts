@@ -9,7 +9,7 @@ MAX_REQUEST=2
 MAX_INTERVAL=5s
 
 # Request json file path
-REQUEST_JSON="query_json/workspaceMetadataQuery.json"
+REQUEST_JSON="commons/workspaceMetadataQuery.json"
 
 # Test name to get printed in logs to differentiate different execution
 TEST_NAME=""
