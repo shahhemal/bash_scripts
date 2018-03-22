@@ -1,0 +1,313 @@
+{
+  "from": 0,
+  "size": 20,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "dis_max": {
+            "tie_breaker": 0.3,
+            "queries": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "bool": {
+                        "must": [
+                          {
+                            "type": {
+                              "value": "document",
+                              "boost": 1
+                            }
+                          },
+                          {
+                            "multi_match": {
+                              "query": "query_term_param",
+                              "fields": [
+                                "primary$itemName$_str_qry_rbl_eng^100.0",
+                                "primary$itemName$_str_qry_std^1.0",
+                                "primary$note$_str_qry_rbl_eng^1.0",
+                                "primary$note$_str_qry_std^1.0"
+                              ],
+                              "type": "most_fields",
+                              "operator": "AND",
+                              "slop": 0,
+                              "prefix_length": 0,
+                              "max_expansions": 50,
+                              "lenient": false,
+                              "zero_terms_query": "NONE",
+                              "boost": 1
+                            }
+                          }
+                        ],
+                        "disable_coord": false,
+                        "adjust_pure_negative": true,
+                        "boost": 1
+                      }
+                    },
+                    {
+                      "has_child": {
+                        "query": {
+                          "multi_match": {
+                            "query": "query_term_param",
+                            "fields": [
+                              "extractedRendering$dc_description$_str_qry_rbl_eng^1.0",
+                              "extractedRendering$dc_description$_str_qry_std^1.0",
+                              "extractedRendering$dc_subject$_str_qry_rbl_eng^1.0",
+                              "extractedRendering$dc_subject$_str_qry_std^1.0",
+                              "extractedRendering$dc_title$_str_qry_rbl_eng^1.0",
+                              "extractedRendering$dc_title$_str_qry_std^1.0",
+                              "extractedRendering$text$_str_qry_rbl_eng^1.0",
+                              "extractedRendering$text$_str_qry_std^1.0",
+                              "extractedRendering$w_comments$_str_qry_rbl_eng^1.0",
+                              "extractedRendering$w_comments$_str_qry_std^1.0"
+                            ],
+                            "type": "most_fields",
+                            "operator": "AND",
+                            "slop": 0,
+                            "prefix_length": 0,
+                            "max_expansions": 50,
+                            "lenient": false,
+                            "zero_terms_query": "NONE",
+                            "boost": 1
+                          }
+                        },
+                        "type": "document_extractedRendering",
+                        "score_mode": "none",
+                        "min_children": 0,
+                        "max_children": 2147483647,
+                        "ignore_unmapped": false,
+                        "boost": 1
+                      }
+                    }
+                  ],
+                  "disable_coord": false,
+                  "adjust_pure_negative": true,
+                  "boost": 1
+                }
+              }
+            ],
+            "boost": 1
+          }
+        }
+      ],
+      "filter": [
+        {
+          "bool": {
+            "must": [
+              {
+                "bool": {
+                  "must": [
+                    {
+                      "bool": {
+                        "must_not": [
+                          {
+                            "terms": {
+                              "primary$statusId$_str_flt": [
+                                "5"
+                              ],
+                              "boost": 1
+                            }
+                          }
+                        ],
+                        "disable_coord": false,
+                        "adjust_pure_negative": true,
+                        "boost": 1
+                      }
+                    },
+                    {
+                      "terms": {
+                        "primary$copyComplete$_str": [
+                          "T"
+                        ],
+                        "boost": 1
+                      }
+                    },
+                    {
+                      "terms": {
+                        "primary$hubSearchEnabled$_str": [
+                          "T"
+                        ],
+                        "boost": 1
+                      }
+                    },
+                    {
+                      "bool": {
+                        "must_not": [
+                          {
+                            "terms": {
+                              "primary$phaseId$_str_flt": [
+                                "4"
+                              ],
+                              "boost": 1
+                            }
+                          }
+                        ],
+                        "disable_coord": false,
+                        "adjust_pure_negative": true,
+                        "boost": 1
+                      }
+                    }
+                  ],
+                  "disable_coord": false,
+                  "adjust_pure_negative": true,
+                  "boost": 1
+                }
+              },
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "terms": {
+                        "security$allow$_str_m_flt": [
+                          "U#user_id_param",
+                          "ALLOW_ALL_ACCESS"
+                        ],
+                        "boost": 1
+                      }
+                    }
+                  ],
+                  "disable_coord": false,
+                  "adjust_pure_negative": true,
+                  "boost": 1
+                }
+              }
+            ],
+            "disable_coord": false,
+            "adjust_pure_negative": true,
+            "boost": 1
+          }
+        }
+      ],
+      "should": [
+        {
+          "has_child": {
+            "query": {
+              "match_all": {
+                "boost": 1
+              }
+            },
+            "type": "document_extractedRendering",
+            "score_mode": "none",
+            "min_children": 0,
+            "max_children": 2147483647,
+            "ignore_unmapped": false,
+            "boost": 1,
+            "inner_hits": {
+              "name": "document_extractedRendering",
+              "ignore_unmapped": true,
+              "from": 0,
+              "size": 1,
+              "version": false,
+              "explain": false,
+              "track_scores": false,
+              "stored_fields": "extractedRendering$mimetype$_str"
+            }
+          }
+        }
+      ],
+      "disable_coord": false,
+      "adjust_pure_negative": true,
+      "boost": 1
+    }
+  },
+  "stored_fields": [
+    "primary$resourceId$_str",
+    "primary$resourceTypeId$_str",
+    "primary$originalFileExtention$_str",
+    "primary$fileSize$_long",
+    "",
+    "primary$itemName$_str_ret",
+    "primary$workspaceName$_str",
+    "primary$workspaceId$_str",
+    "primary$tag$_str_m_ret",
+    "primary$parentName$_str",
+    "",
+    "primary$url$_str",
+    "primary$isPrivate$_str",
+    "primary$pvpEnabled$_str"
+  ],
+  "sort": [
+    {
+      "createdat$_date_fct": {
+        "order": "desc",
+        "missing": "_last"
+      }
+    },
+    {
+      "_score": {
+        "order": "desc"
+      }
+    }
+  ],
+  "aggregations": {
+    "originalFileExtention": {
+      "meta": {
+        "#il#facetName#": "originalFileExtention",
+        "#il#facetField#": "originalFileExtention"
+      },
+      "terms": {
+        "field": "primary$originalFileExtention$_str_fct",
+        "size": 10,
+        "shard_size": 5000,
+        "min_doc_count": 1,
+        "shard_min_doc_count": 0,
+        "show_term_doc_count_error": true,
+        "order": {
+          "_count": "desc"
+        }
+      }
+    },
+    "orgnizationName": {
+      "meta": {
+        "#il#facetName#": "orgnizationName",
+        "#il#facetField#": "orgnizationName"
+      },
+      "terms": {
+        "field": "primary$orgnizationName$_str_fct",
+        "size": 10,
+        "shard_size": 5000,
+        "min_doc_count": 1,
+        "shard_min_doc_count": 0,
+        "show_term_doc_count_error": true,
+        "order": {
+          "_count": "desc"
+        }
+      }
+    },
+    "workspaceName": {
+      "meta": {
+        "#il#facetName#": "workspaceName",
+        "#il#facetField#": "workspaceName"
+      },
+      "terms": {
+        "field": "primary$workspaceName$_str_fct",
+        "size": 10,
+        "shard_size": 5000,
+        "min_doc_count": 1,
+        "shard_min_doc_count": 0,
+        "show_term_doc_count_error": true,
+        "order": {
+          "_count": "desc"
+        }
+      }
+    },
+    "tag": {
+      "meta": {
+        "#il#facetName#": "tag",
+        "#il#facetField#": "tag"
+      },
+      "terms": {
+        "field": "primary$tag$_str_m_fct",
+        "size": 10,
+        "shard_size": 5000,
+        "min_doc_count": 1,
+        "shard_min_doc_count": 0,
+        "show_term_doc_count_error": true,
+        "order": {
+          "_count": "desc"
+        }
+      }
+    }
+  }
+}
