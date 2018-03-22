@@ -21,6 +21,11 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    -e|--env)
+    ENV="$2"
+    shift # past argument
+    shift # past value
+    ;;
 esac
 done
 
@@ -39,11 +44,16 @@ if [[ $REQUEST_JSON = *"workspace"* && -n $WS_ID_ARG ]]; then
     exit 1
 fi
 
+if [[ -z $ENV ]]; then
+    echo "Missing ENV argument for eg: -e crl"
+    exit 1
+fi
+
 echo ""
 echo "### Execution started ###"
 echo ""
 
-source common_config.sh
+source ${ENV}_common_config.sh
 source $TEST_FOLDER_ARG/config.sh
 
 if [[ -z $TEST_NAME ]]; then
